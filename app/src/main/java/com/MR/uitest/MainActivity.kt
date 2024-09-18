@@ -32,8 +32,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 
 
-data class Message(val author: String, val body: String, val adress: String) {
-}
+data class Message(val author: String, val body: String, val adress: String)
+data class DoList (val task : String , val isCompleted : Boolean)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +44,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
                         Main()
+
+
                     }
                 }
             }
@@ -92,6 +94,7 @@ fun Main() {
             }
         } else {
             Pic(Message(author, body, adress))
+            PreviewDoListConversation()
         }
     }
 }
@@ -114,6 +117,7 @@ fun Pic(msg: Message) {
             Text(text = msg.author, style = TextStyle(fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = msg.body)
+
         }
     }
 }
@@ -128,24 +132,32 @@ fun MessageCard(message: Message) {
         Text(text = "Address: ${message.adress}", fontSize = 14.sp)
     }
 }
+@Composable
+fun DoListCard(task: DoList) {
+    Column(modifier = Modifier.padding(8.dp)) {
+        Text(text = "Task: ${task.task}", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(text = if (task.isCompleted) "Status: Completed" else "Status: Not Completed", fontSize = 16.sp)
+    }
+}
 
 
 @Composable
-fun Conversation(messages: List<Message>) {
+fun DoListConversation(tasks: List<DoList>) {
     LazyColumn {
-        items(messages) { message ->
-            MessageCard(message)
+        items(tasks) { task ->
+            DoListCard(task)
         }
     }
 }
 
 @Preview
 @Composable
-fun PreviewConversation() {
-    val sampleMessages = listOf(
-        Message("Mahdi", "Hello, Welcome to my first application!", "123 Street"),
-        Message("Sara", "Good job!", "456 Avenue"),
-        Message("Ali", "Looks great!", "789 Boulevard")
+fun PreviewDoListConversation() {
+    val sampleTasks = listOf(
+        DoList("learning english", false),
+        DoList("university", true),
+        DoList("gym", true)
     )
-    Conversation(sampleMessages)
+    DoListConversation(sampleTasks)
 }
